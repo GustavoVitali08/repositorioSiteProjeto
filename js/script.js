@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   const slides = document.querySelectorAll(".carousel-slide");
+  console.log("slide carrossel", slides);
   const dots = document.querySelectorAll(".dot");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -18,9 +19,36 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideIntervalo;
   function showSlide(index) {
     slides.forEach((slide) => slide.classList.remove("active"));
+    console;
     dots.forEach((dot) => dot.classList.remove("active"));
-    slideAtual = (index + slides.lenght) % slides.length;
+    slideAtual = (index + slides.length) % slides.length;
+    console.log("slide atual", slideAtual);
     slides[slideAtual].classList.add("active");
+    console.log("slides", slides);
+    console.log("dots", dots);
     dots[slideAtual].classList.add("active");
   }
+  function nextSlide() {
+    showSlide(slideAtual + 1);
+  }
+  function prevSlide() {
+    showSlide(slideAtual - 1);
+  }
+  function startSlide() {
+    slideIntervalo = setInterval(nextSlide, 5000);
+  }
+  function stopSlide() {
+    clearInterval(slideIntervalo);
+  }
+  nextBtn.addEventListener("click", () => {
+    nextSlide();
+    stopSlide();
+    startSlide();
+  });
+  prevBtn.addEventListener("click", () => {
+    prevSlide();
+    stopSlide();
+    startSlide();
+  });
+  startSlide();
 }); //Final função evento
