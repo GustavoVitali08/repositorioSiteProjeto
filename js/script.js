@@ -50,5 +50,55 @@ document.addEventListener("DOMContentLoaded", () => {
     stopSlide();
     startSlide();
   });
+  dots.forEach((dot) => {
+    dot.addEventListener("click", (e) => {
+      const index = parseInt(e.target.getAttribute("data-index"));
+      showSlide(index);
+      stopSlide();
+      startSlide();
+    });
+  });
   startSlide();
+  const contato = document.getElementById("contato");
+  const nome = document.getElementById("name");
+  const email = document.getElementById("email");
+  const mensagem = document.getElementById("mensagem");
+
+  function isValidEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+  contato.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let isValid = true;
+    //Validação do campo nome(verificar mínimo 3 caracteres)
+    if (nome.value.trim().length < 3) {
+      showError(nome, "o nome deve ter no mínimo 3 caracteres");
+      isValid = false;
+    }
+    //Validação do campo email
+    if (!IsValidEmail(email.value.trim())) {
+      showError(email, "Insira um email válido");
+      IsValidEmail = False;
+    }
+    //Validação do campo mensagem
+    if (mensagem.value.trim().length < 10) {
+      showError(mensagem, "A mensagem deve ter no mínimo 10 caracteres");
+      isValid = false;
+    }
+    //Validar se tudo estiver correto
+    if (isValid) {
+      clearError();
+      alert("Mensagem enviado com sucesso");
+      contato.reset();
+    }
+  });
+  function showError(inputElement, mensagem) {
+    const formGroup = inputElement.parentElement();
+    inputElement.classlist.add("input-error");
+    const errorMensagem = document.createElement("small");
+    errorMensagem.className = "error-text";
+    errorMensagem.innerText = mensagem;
+    formGroup.appendChild(errorMensagem);
+  }
 }); //Final função evento
