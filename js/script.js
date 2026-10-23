@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   startSlide();
-  const contato = document.getElementById("contato");
+  const contato = document.getElementById("contatoForm");
   const nome = document.getElementById("name");
   const email = document.getElementById("email");
   const mensagem = document.getElementById("mensagem");
@@ -70,16 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   contato.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    clearError();
+
     let isValid = true;
+
     //Validação do campo nome(verificar mínimo 3 caracteres)
     if (nome.value.trim().length < 3) {
       showError(nome, "o nome deve ter no mínimo 3 caracteres");
       isValid = false;
     }
     //Validação do campo email
-    if (!IsValidEmail(email.value.trim())) {
+    if (!isValidEmail(email.value.trim())) {
       showError(email, "Insira um email válido");
-      IsValidEmail = False;
+      isValidEmail = False;
     }
     //Validação do campo mensagem
     if (mensagem.value.trim().length < 10) {
@@ -88,17 +92,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     //Validar se tudo estiver correto
     if (isValid) {
+      console.log("entrou");
       clearError();
-      alert("Mensagem enviado com sucesso");
+      console.log("passsou");
+      showToast("Mensagem enviado com sucesso");
       contato.reset();
     }
   });
+  function showToast(mensagem) {
+    const toast = document.getElementById("toast");
+    const toastMensagem = document.getElementById("toastMensagem");
+    toastMensagem.textContent = mensagem;
+    toast.classList.add("show");
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000);
+  }
+  //remover borda vermelha
+  [nome, email, mensagem].forEach((input) => {
+    input.addEventListener("input", () => {
+      clearFieldError(input);
+    });
+  });
   function showError(inputElement, mensagem) {
-    const formGroup = inputElement.parentElement();
-    inputElement.classlist.add("input-error");
+    const formGroup = inputElement.parentElement;
+    clearFieldError(inputElement);
+    inputElement.classList.add("input-error");
     const errorMensagem = document.createElement("small");
     errorMensagem.className = "error-text";
     errorMensagem.innerText = mensagem;
     formGroup.appendChild(errorMensagem);
+  }
+  function clearFieldError(inputElement) {
+    const formGroup = inputElement.parentElement;
+    inputElement.classList.remove("input-error");
+    const removerErro = formGroup.querySelector("error-text");
+    if (removerErro) {
+      removerErro.remove();
+    }
+  }
+
+  function clearError() {
+    document.querySelectorAll(".error-text").forEach((el) => el.remove());
+    document
+      .querySelectorAll(".input-error")
+      .forEach((el) => el.classList.remove("input-error"));
   }
 }); //Final função evento
